@@ -1,0 +1,19 @@
+{
+    "name": "Haskell Dev",
+    "image": "ghcr.io/stetrevor/haskell-dev:nano",
+    "mounts": [
+        "source=haskell-cabal-global,target=/home/vscode/.cabal,type=volume"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "haskell.haskell"
+            ],
+            "settings": {
+                "haskell.manageHLS": "PATH",
+                "haskell.serverExecutablePath": "/home/vscode/.ghcup/bin/haskell-language-server-wrapper"
+            }
+        }
+    },
+    "remoteUser": "vscode"
+}
