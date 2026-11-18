@@ -20,7 +20,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 USER vscode
 ENV PATH="/home/vscode/.ghcup/bin:${PATH}"
 
-# Install GHCup, GHC 9.10.3, Cabal, and HLS, then prune caches, docs, profiling libs, and unused HLS versions
+# Install GHCup, GHC 9.10.3, Cabal, HLS, and cabal-gild, then prune caches, docs, profiling libs, and unused HLS versions
 RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | \
     BOOTSTRAP_HASKELL_NONINTERACTIVE=1 \
     BOOTSTRAP_HASKELL_GHC_VERSION=9.10.3 \
@@ -28,12 +28,20 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | \
     BOOTSTRAP_HASKELL_INSTALL_HLS=1 \
     BOOTSTRAP_HASKELL_ADJUST_BASHRC=P \
     sh \
+    && /home/vscode/.ghcup/bin/cabal update \
+    && /home/vscode/.ghcup/bin/cabal install cabal-gild \
+    --installdir=/home/vscode/.ghcup/bin \
+    --install-method=copy \
+    --overwrite-policy=always \
     && GHC_VER="$(/home/vscode/.ghcup/bin/ghc --numeric-version)" \
     && rm -rf /home/vscode/.ghcup/cache/* \
     /home/vscode/.ghcup/logs/* \
     /home/vscode/.ghcup/stack \
     /home/vscode/.ghcup/ghc/*/share/doc \
     /home/vscode/.ghcup/ghc/*/share/man \
+    /home/vscode/.cabal \
+    /home/vscode/.cache/cabal \
+    /home/vscode/.local/state/cabal \
     # Remove GHC profiling libraries
     && find /home/vscode/.ghcup/ghc -type f \( -name "*_p.a" -o -name "*.p_hi" \) -delete \
     # Keep only exact top-level HLS version directory matching $GHC_VER (preserves libHSghc-lib-parser-ex-*)
@@ -46,7 +54,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | \
     -exec rm -rf {} + \
     # Remove static archives and interface files inside HLS (HLS only uses .so at runtime)
     && find /home/vscode/.ghcup/hls -type f \( -name "*.a" -o -name "*.hi" -o -name "*.dyn_hi" \) -delete \
-    # Strip debug symbols from shared libraries and executables
+    # Strip debug symbols from shared libraries and executables (including cabal-gild)
     && find /home/vscode/.ghcup -type f \( -name "*.so*" -o -executable \) \
     -exec strip --strip-unneeded {} + 2>/dev/null || true \
     # Remove dangling symlinks left behind in ~/.ghcup/bin
