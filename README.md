@@ -8,7 +8,9 @@ Minimal Ubuntu-based Haskell dev container image (~670–720 MB compressed) with
 - **Cabal:** `3.16.1.0`
 - **Haskell Language Server (HLS):** `2.14.0.0` (built for GHC `9.10.3`, with built-in `fourmolu` formatting)
 - **Formatters:** `cabal-gild` (pre-installed in `/home/vscode/.ghcup/bin`)
-- **Tags:** `ghcr.io/stetrevor/haskell-dev:nano`, `ghcr.io/stetrevor/haskell-dev:ghc-9.10.3`
+- **Tags:**
+  - `ghcr.io/stetrevor/haskell-dev:ghc-9.10.3` — recommended for project `devcontainer.json` files to pin the GHC major version while still receiving toolchain/formatter updates
+  - `ghcr.io/stetrevor/haskell-dev:nano` — rolling tag pointing to the latest build
 
 ## Quick Start in Any Haskell Project
 
@@ -20,7 +22,7 @@ Minimal Ubuntu-based Haskell dev container image (~670–720 MB compressed) with
      -o .devcontainer/devcontainer.json
    ```
 
-2. Open the project in VS Code and run **Dev Containers: Reopen in Container** (or **Rebuild Container**).
+2. Open the project in VS Code and run **Dev Containers: Reopen in Container** (or **Rebuild Container**, which automatically pulls the latest image digest for the configured tag).
 
 3. If this is your first project using the shared `haskell-cabal-global` volume, populate the Hackage index once inside the container terminal:
 
