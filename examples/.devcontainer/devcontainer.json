@@ -4,6 +4,9 @@
     "mounts": [
         "source=haskell-cabal-global,target=/home/vscode/.cabal,type=volume"
     ],
+    "remoteEnv": {
+        "PATH": "/home/vscode/.cabal/bin:${containerEnv:PATH}"
+    },
     "customizations": {
         "vscode": {
             "extensions": [
@@ -11,7 +14,16 @@
             ],
             "settings": {
                 "haskell.manageHLS": "PATH",
-                "haskell.serverExecutablePath": "/home/vscode/.ghcup/bin/haskell-language-server-wrapper"
+                "haskell.serverExecutablePath": "/home/vscode/.ghcup/bin/haskell-language-server-wrapper",
+                "haskell.formattingProvider": "fourmolu",
+                "[haskell]": {
+                    "editor.defaultFormatter": "haskell.haskell",
+                    "editor.formatOnSave": true
+                },
+                "[cabal]": {
+                    "editor.defaultFormatter": "haskell.haskell",
+                    "editor.formatOnSave": true
+                }
             }
         }
     },
