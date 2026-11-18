@@ -1,6 +1,7 @@
 {
     "name": "Haskell Dev",
-    "image": "ghcr.io/stetrevor/haskell-dev:nano",
+    "image": "ghcr.io/stetrevor/haskell-dev:ghc-9.10.3",
+    "initializeCommand": "docker pull ghcr.io/stetrevor/haskell-dev:nano || true",
     "mounts": [
         "source=haskell-cabal-global,target=/home/vscode/.cabal,type=volume"
     ],
